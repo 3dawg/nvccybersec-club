@@ -10,5 +10,5 @@ The Northwest Vista Cybersecurity Club will use this repository in order to cont
 Main contributors include....
 - 3dawg(chaossec)
 - sqrly
-- atschan 
+- ateschan 
   
