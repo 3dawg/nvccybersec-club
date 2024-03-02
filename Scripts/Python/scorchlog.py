@@ -31,25 +31,29 @@ def valid_ip(address):
 def vsftpAnalyze(file_path):
     print("Analyzing basic information about the log....")
     users = set()
-
-# Dictionary to store user download information
-    user_downloads = {}
-
-    # Dictionary to store user upload information
-    user_uploads = {}
-
+    ips = set()
+    user_downloads = {}  # Dictionary to store user download information
+    user_uploads = {}    # Dictionary to store user upload information
+    user_ip_map = {}     # Dictionary to map users to their unique IP addresses
+    username = None
+    
     with open(file_path, 'r') as file:
         for line in file:
             username_match = re.search(r'\[(\w+)\]', line)  # Extract username enclosed within square brackets
             if username_match:
                 username = username_match.group(1)
                 users.add(username)  # Add the username to the set
+            ip_matches = re.findall(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b', line)  # Extract IP addresses
+            for ip in ip_matches:
+                ips.add(ip)
+                user_ip_map.setdefault(username, set()).add(ip)  # Add the IP address to the user's set
 
     print("Users are now in the database, please query what you want")
-    print("-----------------------------------------VSFTPD Analyis-------------------------------------------------------")
+    print("-----------------------------------------VSFTPD Analysis-------------------------------------------------------")
     print("print = Print the user database information")
     print("down = Print how many bytes of information the user has downloaded")
     print("up = Print how many bytes of information the user has uploaded")
+    print("unique = Print how many unique IP addresses were in the log file")
     print("exit = Exit the program")
 
     with open(file_path, 'r') as file:
@@ -70,8 +74,11 @@ def vsftpAnalyze(file_path):
     while True:
         choice = input("scorchLog :: vsftpd> ")
         if choice == 'print':
-            for i, user in enumerate(users):
-                print("User {}: {}".format(i + 1, user))
+            print("Users mapped to their unique IP addresses:")
+            for user, ips in user_ip_map.items():
+                ip_list = ", ".join(ips)
+                print(f"User: {user} IP Addresses: {ip_list}")
+
         elif choice == 'exit':
             exit(0)
         elif choice == 'down':
@@ -86,8 +93,14 @@ def vsftpAnalyze(file_path):
                 print("\tBytes uploaded by {}: {} bytes".format(user, user_uploads[user]))
             else:
                 print("\tUser '{}' not found in the database. Or they didn't upload anything".format(user))
+        elif choice == 'unique':
+            print("Unique IP addresses found in the log are:")
+            for ip in ips:
+                print(ip)
         else:
             print("Invalid choice. Please try again.")
+
+    
 
 
 
