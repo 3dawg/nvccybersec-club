@@ -8,6 +8,6 @@ The Northwest Vista Cybersecurity Club will use this repository in order to cont
   - and others.....
 
 Main contributors include....
--3dawg(chaossec)
--ateschan
--sqrly
+  -3dawg(chaossec)
+  -ateschan
+  -sqrly
