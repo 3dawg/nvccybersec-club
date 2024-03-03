@@ -1,38 +1,5 @@
-import time
-import os
 import re
-import struct 
-import argparse
-import socket 
 
-#//////------------------------------Import our utility functions----------------------------------
-def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
-
-def check_string_in_file(file_path, target_string):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            if target_string in content:
-                return f"'{target_string}' found in {file_path}"
-            else:
-                return f"'{target_string}' not found in {file_path}"
-    except FileNotFoundError:
-        return f"File {file_path} not found."
-
-def valid_ip(address):
-    try: 
-        socket.inet_aton(address)
-        return True
-    except:
-        return False
-
-def int_to_ip(int_ip):
-    return socket.inet_ntoa(struct.pack('!I', int_ip))
-
-def timestamp_to_date(timestamp):
-    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
-    
 #//////------------------------------Analyze VSFTPD log--------------------------------------------------
 def vsftpAnalyze(file_path):
     users = set()
@@ -78,7 +45,6 @@ def vsftpAnalyze(file_path):
                 client_ip = mkdir_match.group(1)
                 directory_path = mkdir_match.group(2)
                 user_directories.setdefault(username, []).append(directory_path)
-
     print("-----------------------------------------VSFTPD Analysis-------------------------------------------------------")
     print("print = Print the user database information")
     print("down = Print how many bytes of information the user has downloaded")
@@ -129,83 +95,3 @@ def vsftpAnalyze(file_path):
                 print(f"User: {user} IP Addresses: {ip_list}")
         else:
             print("Invalid choice. Please try again.")
-#//////------------------------------Analyze .sky file--------------------------------------------------
-def skyAnalyze(file_path):
-    with open(file_path, 'rb') as f:
-        # Parse header
-        magic_bytes = f.read(8)
-        version = struct.unpack('>B', f.read(1))[0]
-        creation_timestamp = struct.unpack('>I', f.read(4))[0]
-        hostname_length = struct.unpack('>I', f.read(4))[0]
-        hostname = f.read(hostname_length).decode()
-        flag_length = struct.unpack('>I', f.read(4))[0]
-        flag = f.read(flag_length).decode()
-        num_entries = struct.unpack('>I', f.read(4))[0]
-        # Parse body
-        print("Parsing host information...")
-        for _ in range(num_entries):
-            source_ip = struct.unpack('>I', f.read(4))[0]
-            destination_ip = struct.unpack('>I', f.read(4))[0]
-            timestamp = struct.unpack('>I', f.read(4))[0]
-            bytes_transferred = struct.unpack('>I', f.read(4))[0]
-
-            print(f'\nSource IP: {int_to_ip(source_ip)}')
-            print(f'Destination IP: {int_to_ip(destination_ip)}')
-            print(f'Timestamp: {timestamp_to_date(timestamp)}')
-            print(f'Bytes Transferred: {bytes_transferred}')
-           
-
-        print("-----------------------------------------Sky File Analysis-------------------------------------------------------")
-        print("magicbytes = Print the magic bytes of the file")
-        print("version = Print the version of the file")
-        print("filecreation = Print the creation date of the file")
-        print("hostname = Print the hostname that coresponds with the file")
-        print("flag = Print the flag of the log")
-        print("entries = Print the number of entries in the file")
-        print("exit = Exit the program")
-
-    while True:
-        choice = input("scorchLog :: sky> ")
-        if choice == 'magicbytes':
-            print(f'Magic Bytes: {magic_bytes}')
-        elif choice == 'version':
-            print(f'Version: {version}')
-        elif choice == 'filecreation':
-            print(f'Creation Timestamp: {timestamp_to_date(creation_timestamp)}')
-        elif choice == 'hostname':
-            print(f'Hostname: {hostname}')
-        elif choice == 'flag':
-            print(f'Flag: {flag}')
-        elif choice == 'entries':
-            print(f'Number of entries: {num_entries}')
-        elif choice == 'exit':
-            exit(0)
-        else:
-            print("Invalid choice, please try again")
-#//////------------------------------Main function------------------------------------------------------
-
-if __name__ == "__main__":
-
-    # Parse command line arguments
-    parser = argparse.ArgumentParser(
-                    prog='Scorchlog.py',
-                    description='Makes log analysis a hell of a lot easier',
-                    epilog='--------------written by chaossec--------------')
-    parser.add_argument('-f', '--filename',  help='Path to the file taken as a string', type=str, required=True)   #file argument, need a exception if there is no such file.
-    parser.add_argument('-t', '--type' , help='Type of log to process, current supported choices are VSFTP, SKY', type=str, required=True)   # specify type of log so that we can distinguish between them.
-    args = parser.parse_args()
-
-    # Now we go ahead and handle the logic of what type of log we are dealing with
-    if args.type == "VSFTP":
-        print("Now analyzing your vsftpd log file....")
-        time.sleep(3)
-        cls()
-        vsftpAnalyze(args.filename)
-    elif args.type == "SKY":
-        print("Now analyzing your sky file....")
-        time.sleep(3)
-        cls()
-
-    else:
-        print("Invalid or unsupported log type...please try again")
-    
