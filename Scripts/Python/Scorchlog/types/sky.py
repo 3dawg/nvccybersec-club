@@ -1,9 +1,23 @@
 import struct
 import scorchutils
+import time
 
-#//////------------------------------Analyze .sky file--------------------------------------------------
+#------------------------------Analyze .sky file------------------------------
+
+def options():
+    print(scorchutils.colors.fg.cyan, "-----------------------------------------Sky File Analysis-----------------------------------------", scorchutils.colors.reset)
+    print(scorchutils.colors.fg.lightblue, "magicbytes", scorchutils.colors.reset, "   Print the magic bytes of the file")
+    print(scorchutils.colors.fg.lightblue, "version", scorchutils.colors.reset, "      Print the version of the file")
+    print(scorchutils.colors.fg.lightblue, "filecreation", scorchutils.colors.reset, " Print the creation date of the file")
+    print(scorchutils.colors.fg.lightblue, "hostname", scorchutils.colors.reset, "     Print the hostname that coresponds with the file")
+    print(scorchutils.colors.fg.lightblue, "flag", scorchutils.colors.reset, "         Print the flag of the log")
+    print(scorchutils.colors.fg.lightblue, "entries", scorchutils.colors.reset, "      Print the number of entries in the file")
+    print(scorchutils.colors.fg.lightblue, "exit", scorchutils.colors.reset, "         Exit the program")
+
+
 def skyAnalyze(file_path):
     with open(file_path, 'rb') as f:
+
         # Parse header
         magic_bytes = f.read(8)
         version = struct.unpack('>B', f.read(1))[0]
@@ -13,6 +27,7 @@ def skyAnalyze(file_path):
         flag_length = struct.unpack('>I', f.read(4))[0]
         flag = f.read(flag_length).decode()
         num_entries = struct.unpack('>I', f.read(4))[0]
+        
         # Parse body
         print("Parsing host information...")
         for _ in range(num_entries):
@@ -27,31 +42,31 @@ def skyAnalyze(file_path):
             print(f'Bytes Transferred: {bytes_transferred}')
            
 
-        print("-----------------------------------------Sky File Analysis-------------------------------------------------------")
-        print("magicbytes = Print the magic bytes of the file")
-        print("version = Print the version of the file")
-        print("filecreation = Print the creation date of the file")
-        print("hostname = Print the hostname that coresponds with the file")
-        print("flag = Print the flag of the log")
-        print("entries = Print the number of entries in the file")
-        print("exit = Exit the program")
-
     while True:
         choice = input("scorchLog :: sky> ")
-        if choice == 'magicbytes':
-            print(f'Magic Bytes: {magic_bytes}')
-        elif choice == 'version':
-            print(f'Version: {version}')
-        elif choice == 'filecreation':
-            print(f'Creation Timestamp: {timestamp_to_date(creation_timestamp)}')
-        elif choice == 'hostname':
-            print(f'Hostname: {hostname}')
-        elif choice == 'flag':
-            print(f'Flag: {flag}')
-        elif choice == 'entries':
-            print(f'Number of entries: {num_entries}')
-        elif choice == 'exit':
-            exit(0)
-        else:
-            print("Invalid choice, please try again")
+
+        match (choice):
+            case 'magicbytes':
+                print(f'Magic Bytes: {magic_bytes}')
+
+            case 'version':
+                print(f'Version: {version}')
+
+            case 'filecreation':
+                print(f'Creation Timestamp: {scorchutils.timestamp_to_date(creation_timestamp)}')
+                
+            case 'hostname':
+                print(f'Hostname: {hostname}')
+
+            case 'flag':
+                print(f'Flag: {flag}')
+                
+            case 'entries':
+                print(f'Number of entries: {num_entries}')
+
+            case 'exit':
+                exit(0)
+
+            case _:
+                print("Invalid choice, please try again")
 

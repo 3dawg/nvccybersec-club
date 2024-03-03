@@ -1,7 +1,20 @@
-import re
+import re, scorchutils
 
-#//////------------------------------Analyze VSFTPD log--------------------------------------------------
+#------------------------------Analyze VSFTPD log------------------------------
+
+def options():
+    print(scorchutils.colors.fg.cyan, "-----------------------------------------VSFTPD Analysis-----------------------------------------", scorchutils.colors.reset)
+    print(scorchutils.colors.fg.lightblue, "print      ", scorchutils.colors.reset, " Print the user database information")
+    print(scorchutils.colors.fg.lightblue, "down       ", scorchutils.colors.reset, " Print how many bytes of information the user has downloaded")
+    print(scorchutils.colors.fg.lightblue, "up         ", scorchutils.colors.reset, " Print how many bytes of information the user has uploaded")
+    print(scorchutils.colors.fg.lightblue, "uploads    ", scorchutils.colors.reset, " Print the files that were uploaded by users in the log file")
+    print(scorchutils.colors.fg.lightblue, "downloads  ", scorchutils.colors.reset, " Print the files that were downloaded by users in the log file")
+    print(scorchutils.colors.fg.lightblue, "directories", scorchutils.colors.reset, " Print the directories that were created by users in the log file")
+    print(scorchutils.colors.fg.lightblue, "unique     ", scorchutils.colors.reset, " Print how many unique IP addresses were in the log file and corespond them with users")
+    print(scorchutils.colors.fg.lightblue, "exit       ", scorchutils.colors.reset, " Exit the program")
+
 def vsftpAnalyze(file_path):
+    options()
     users = set()
     ips = set()
     user_downloads = {}
@@ -13,6 +26,7 @@ def vsftpAnalyze(file_path):
     username = None
     
     with open(file_path, 'r') as file:
+
         for line in file:
             username_match = re.search(r'\[(\w+)\]', line)
             if username_match:
@@ -45,53 +59,54 @@ def vsftpAnalyze(file_path):
                 client_ip = mkdir_match.group(1)
                 directory_path = mkdir_match.group(2)
                 user_directories.setdefault(username, []).append(directory_path)
-    print("-----------------------------------------VSFTPD Analysis-------------------------------------------------------")
-    print("print = Print the user database information")
-    print("down = Print how many bytes of information the user has downloaded")
-    print("up = Print how many bytes of information the user has uploaded")
-    print("uploads = Print the files that were uploaded by users in the log file")
-    print("downloads = Print the files that were downloaded by users in the log file")
-    print("directories = Print the directories that were created by users in the log file")
-    print("unique = Print how many unique IP addresses were in the log file and corespond them with users")
-    print("exit = Exit the program")
 
     while True:
         choice = input("scorchLog :: vsftpd> ")
-        if choice == 'print':
-            print("\tUsers:")
-            for i, user in enumerate(users):
-                print(f"\t{i + 1}. {user}")
-        elif choice == 'exit':
-            exit(0)
-        elif choice == 'down':
-          user = input("\tEnter the username to query: ")
-          total_bytes_downloaded = user_downloads.get(user, 0)  # Retrieve the total bytes uploaded by the user
-          print(f"\tTotal bytes downloaded by {user}: {total_bytes_downloaded} bytes")
-        elif choice == 'up':
-            user = input("\tEnter the username to query: ")
-            total_bytes_uploaded = user_uploads.get(user, 0)  # Retrieve the total bytes uploaded by the user
-            print(f"\tTotal bytes uploaded by {user}: {total_bytes_uploaded} bytes")
-        elif choice == 'uploads':
-            print("Files uploaded by users:")
-            for user, files in user_uploads_info.items():
-                print(f"User: {user}")
-                for file in files:
-                    print(f"\t- {file}")
-        elif choice == 'downloads':
-            print("Files downloaded by users:")
-            for user, files in user_downloads_info.items():
-                print(f"User: {user}")
-                for file in files:
-                    print(f"\t- {file}")
-        elif choice == 'directories':
-            print("Directories created by users:")
-            for user, directories in user_directories.items():
-                print(f"User: {user}")
-                for directory in directories:
-                    print(f"\t- {directory}")
-        elif choice == "unique":
-            for user, ips in user_ip_map.items():
-                ip_list = ", ".join(ips)
-                print(f"User: {user} IP Addresses: {ip_list}")
-        else:
-            print("Invalid choice. Please try again.")
+        match (choice):
+
+            case 'print':
+                print("\tUsers:")
+                for i, user in enumerate(users):
+                    print(f"\t{i + 1}. {user}")
+                    
+            case 'down':
+              user = input("\tEnter the username to query: ")
+              total_bytes_downloaded = user_downloads.get(user, 0)  # Retrieve the total bytes uploaded by the user
+              print(f"\tTotal bytes downloaded by {user}: {total_bytes_downloaded} bytes")
+
+            case 'up':
+                user = input("\tEnter the username to query: ")
+                total_bytes_uploaded = user_uploads.get(user, 0)  # Retrieve the total bytes uploaded by the user
+                print(f"\tTotal bytes uploaded by {user}: {total_bytes_uploaded} bytes")
+
+            case 'uploads':
+                print("Files uploaded by users:")
+                for user, files in user_uploads_info.items():
+                    print(f"User: {user}")
+                    for file in files:
+                        print(f"\t- {file}")
+
+            case 'downloads':
+                print("Files downloaded by users:")
+                for user, files in user_downloads_info.items():
+                    print(f"User: {user}")
+                    for file in files:
+                        print(f"\t- {file}")
+
+            case 'directories':
+                print("Directories created by users:")
+                for user, directories in user_directories.items():
+                    print(f"User: {user}")
+                    for directory in directories:
+                        print(f"\t- {directory}")
+
+            case "unique":
+                for user, ips in user_ip_map.items():
+                    ip_list = ", ".join(ips)
+                    print(f"User: {user} IP Addresses: {ip_list}")
+
+            case 'exit':
+                exit(0)
+
+            case _:
+                print("Invalid choice. Please try again.")
