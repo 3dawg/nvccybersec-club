@@ -94,5 +94,8 @@ def vsftpAnalyze(file_path):
             for user, ips in user_ip_map.items():
                 ip_list = ", ".join(ips)
                 print(f"User: {user} IP Addresses: {ip_list}")
+        elif choice == "clear":
+            scorchutils.cls()
+            
         else:
             print("Invalid choice. Please try again.")
