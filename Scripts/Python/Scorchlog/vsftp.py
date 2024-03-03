@@ -1,5 +1,5 @@
 import re
-
+import scorchutils
 #//////------------------------------Analyze VSFTPD log--------------------------------------------------
 def vsftpAnalyze(file_path):
     users = set()
@@ -53,6 +53,7 @@ def vsftpAnalyze(file_path):
     print("downloads = Print the files that were downloaded by users in the log file")
     print("directories = Print the directories that were created by users in the log file")
     print("unique = Print how many unique IP addresses were in the log file and corespond them with users")
+    print("clear = Clear the screen")
     print("exit = Exit the program")
 
     while True:

@@ -34,6 +34,7 @@ def skyAnalyze(file_path):
         print("hostname = Print the hostname that coresponds with the file")
         print("flag = Print the flag of the log")
         print("entries = Print the number of entries in the file")
+        print("clear = Clear the screen")
         print("exit = Exit the program")
 
     while True:
@@ -50,6 +51,8 @@ def skyAnalyze(file_path):
             print(f'Flag: {flag}')
         elif choice == 'entries':
             print(f'Number of entries: {num_entries}')
+        elif choice == "clear":
+            scorchutils.cls()
         elif choice == 'exit':
             exit(0)
         else:
