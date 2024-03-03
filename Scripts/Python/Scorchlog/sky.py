@@ -43,7 +43,7 @@ def skyAnalyze(file_path):
         elif choice == 'version':
             print(f'Version: {version}')
         elif choice == 'filecreation':
-            print(f'Creation Timestamp: {timestamp_to_date(creation_timestamp)}')
+            print(f'Creation Timestamp: {scorchutils.timestamp_to_date(creation_timestamp)}')
         elif choice == 'hostname':
             print(f'Hostname: {hostname}')
         elif choice == 'flag':
