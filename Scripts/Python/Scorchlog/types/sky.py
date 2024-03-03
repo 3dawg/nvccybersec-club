@@ -4,18 +4,24 @@ import time
 
 #------------------------------Analyze .sky file------------------------------
 
-def options():
+def options(header):
     print(scorchutils.colors.fg.cyan, "-----------------------------------------Sky File Analysis-----------------------------------------", scorchutils.colors.reset)
-    print(scorchutils.colors.fg.lightblue, "magicbytes", scorchutils.colors.reset, "   Print the magic bytes of the file")
-    print(scorchutils.colors.fg.lightblue, "version", scorchutils.colors.reset, "      Print the version of the file")
-    print(scorchutils.colors.fg.lightblue, "filecreation", scorchutils.colors.reset, " Print the creation date of the file")
-    print(scorchutils.colors.fg.lightblue, "hostname", scorchutils.colors.reset, "     Print the hostname that coresponds with the file")
-    print(scorchutils.colors.fg.lightblue, "flag", scorchutils.colors.reset, "         Print the flag of the log")
-    print(scorchutils.colors.fg.lightblue, "entries", scorchutils.colors.reset, "      Print the number of entries in the file")
-    print(scorchutils.colors.fg.lightblue, "exit", scorchutils.colors.reset, "         Exit the program")
-
+    for k, i in header.items():
+        print(scorchutils.colors.fg.lightblue, k, scorchutils.colors.reset, i,)
 
 def skyAnalyze(file_path):
+    header = {
+         #title, options
+        "magicbytes": "   Print the magic bytes of the file",
+        "version":  "      Print the version of the file",
+        "filecreation": " Print the creation date of the file",
+        "hostname": "     Print the hostname that coresponds with the file",
+        "flag": "         Print the flag of the log",
+        "entries": "      Print the number of entries in the file",
+        "exit": "         Exit the program",
+        }
+    
+
     with open(file_path, 'rb') as f:
 
         # Parse header
@@ -36,11 +42,11 @@ def skyAnalyze(file_path):
             timestamp = struct.unpack('>I', f.read(4))[0]
             bytes_transferred = struct.unpack('>I', f.read(4))[0]
 
-            print(f'\nSource IP: {scorchutils.int_to_ip(source_ip)}')
-            print(f'Destination IP: {scorchutils.int_to_ip(destination_ip)}')
-            print(f'Timestamp: {scorchutils.timestamp_to_date(timestamp)}')
-            print(f'Bytes Transferred: {bytes_transferred}')
-           
+            # print(f'\nSource IP: {scorchutils.int_to_ip(source_ip)}')
+            # print(f'Destination IP: {scorchutils.int_to_ip(destination_ip)}')
+            # print(f'Timestamp: {scorchutils.timestamp_to_date(timestamp)}')
+            # print(f'Bytes Transferred: {bytes_transferred}')
+    options(header)     
 
     while True:
         choice = input("scorchLog :: sky> ")

@@ -2,27 +2,27 @@ import re, scorchutils
 
 #------------------------------Analyze VSFTPD log------------------------------
 
-def options():
+def options(header):
     print(scorchutils.colors.fg.cyan, "-----------------------------------------VSFTPD Analysis-----------------------------------------", scorchutils.colors.reset)
-    print(scorchutils.colors.fg.lightblue, "print      ", scorchutils.colors.reset, " Print the user database information")
-    print(scorchutils.colors.fg.lightblue, "down       ", scorchutils.colors.reset, " Print how many bytes of information the user has downloaded")
-    print(scorchutils.colors.fg.lightblue, "up         ", scorchutils.colors.reset, " Print how many bytes of information the user has uploaded")
-    print(scorchutils.colors.fg.lightblue, "uploads    ", scorchutils.colors.reset, " Print the files that were uploaded by users in the log file")
-    print(scorchutils.colors.fg.lightblue, "downloads  ", scorchutils.colors.reset, " Print the files that were downloaded by users in the log file")
-    print(scorchutils.colors.fg.lightblue, "directories", scorchutils.colors.reset, " Print the directories that were created by users in the log file")
-    print(scorchutils.colors.fg.lightblue, "unique     ", scorchutils.colors.reset, " Print how many unique IP addresses were in the log file and corespond them with users")
-    print(scorchutils.colors.fg.lightblue, "exit       ", scorchutils.colors.reset, " Exit the program")
+    for k, i in header.items():
+        print(scorchutils.colors.fg.lightblue, k, scorchutils.colors.reset, i,)
 
 def vsftpAnalyze(file_path):
-    options()
-    users = set()
-    ips = set()
-    user_downloads = {}
-    user_downloads_info = {}
-    user_uploads = {}  # Updated to store uploaded bytes
-    user_uploads_info = {}
-    user_directories = {}
-    user_ip_map = {}
+    header = {
+       #title, options
+       "print      ":" Print the user database information",
+       "down       ":" Print how many bytes of information the user has downloaded",
+       "up         ":" Print how many bytes of information the user has uploaded",
+       "uploads    ":" Print the files that were uploaded by users in the log file",
+       "downloads  ":" Print the files that were downloaded by users in the log file",
+       "directories":" Print the directories that were created by users in the log file",
+       "unique     ":" Print how many unique IP addresses were in the log file and corespond them with users",
+       "exit       ":" Exit the program",
+      }
+
+    options(header)
+    users, ips = (set() for i in range(2))
+    user_downloads, user_downloads_info, user_uploads, user_uploads_info, user_directories, user_ip_map = ({} for i in range(6))    
     username = None
     
     with open(file_path, 'r') as file:
