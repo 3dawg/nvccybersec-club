@@ -1,1 +1,1 @@
-Python scripts go here. Remember that you have to push to scripts-untested before you push to main 
+Python scripts go here. Remember that you have to push to scripts-exprimental before you push to main 
