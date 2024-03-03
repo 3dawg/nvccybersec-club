@@ -1,7 +1,6 @@
 import os, socket, struct, time
 
-
-#//////------------------------------Import our utility functions----------------------------------
+#//////------------------------------Global Utils----------------------------------
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 

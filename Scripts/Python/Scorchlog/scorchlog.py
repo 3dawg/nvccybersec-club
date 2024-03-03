@@ -1,7 +1,6 @@
-import argparse, scorchutils, time
+import argparse, scorchutils, time, sys
+sys.path.append('types')
 import sky, vsftp 
-    
-
 
 #//////------------------------------Main function------------------------------------------------------
 
