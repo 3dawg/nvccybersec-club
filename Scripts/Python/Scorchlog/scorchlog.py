@@ -1,9 +1,8 @@
-import argparse, scorchutils, time
+import argparse, scorchutils, time, sys
+sys.path.append('types')
 import sky, vsftp 
-    
 
-
-#//////------------------------------Main function------------------------------------------------------
+#------------------------------Main function------------------------------
 
 if __name__ == "__main__":
 
@@ -19,17 +18,18 @@ if __name__ == "__main__":
     # Now we go ahead and handle the logic of what type of log we are dealing with, with a chill switch statement
 
     match (args.type):
+
         case 'VSFTP':
-            print("Now analyzing your vsftpd log file....")
+            print(scorchutils.colors.fg.lightred, "Now analyzing your vsftpd log file....", scorchutils.colors.reset)
             time.sleep(3)
             scorchutils.cls()
             vsftp.vsftpAnalyze(args.filename)
 
         case 'SKY':
-            print("Now analyzing your sky file....")
+            print(scorchutils.colors.fg.lightred, "Now analyzing your sky file....", scorchutils.colors.reset)
             time.sleep(3)
             scorchutils.cls()
             sky.skyAnalyze(args.filename)
             
         case _:
-            print("Invalid or unsupported log type...please try again")
+            print(scorchutils.colors.fg.lightred, "Invalid or unsupported log type...please try again", scorchutils.colors.reset)
