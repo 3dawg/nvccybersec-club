@@ -18,6 +18,7 @@ def skyAnalyze(file_path):
         "hostname": "     Print the hostname that coresponds with the file",
         "flag": "         Print the flag of the log",
         "entries": "      Print the number of entries in the file",
+        "viewlogs": "     View the log entries in the file",
         "exit": "         Exit the program",
         }
     
@@ -35,17 +36,7 @@ def skyAnalyze(file_path):
         num_entries = struct.unpack('>I', f.read(4))[0]
         
         # Parse body
-        print("Parsing host information...")
-        for _ in range(num_entries):
-            source_ip = struct.unpack('>I', f.read(4))[0]
-            destination_ip = struct.unpack('>I', f.read(4))[0]
-            timestamp = struct.unpack('>I', f.read(4))[0]
-            bytes_transferred = struct.unpack('>I', f.read(4))[0]
 
-            # print(f'\nSource IP: {scorchutils.int_to_ip(source_ip)}')
-            # print(f'Destination IP: {scorchutils.int_to_ip(destination_ip)}')
-            # print(f'Timestamp: {scorchutils.timestamp_to_date(timestamp)}')
-            # print(f'Bytes Transferred: {bytes_transferred}')
     options(header)     
 
     while True:
@@ -69,6 +60,21 @@ def skyAnalyze(file_path):
                 
             case 'entries':
                 print(f'Number of entries: {num_entries}')
+            
+            case 'viewlogs':
+                print("Parsing host information...")
+                time.sleep(3)
+                for _ in range(num_entries):
+                    source_ip = struct.unpack('>I', f.read(4))[0]
+                    destination_ip = struct.unpack('>I', f.read(4))[0]
+                    timestamp = struct.unpack('>I', f.read(4))[0]
+                    bytes_transferred = struct.unpack('>I', f.read(4))[0]
+                    
+                    # Print the log info 
+                    print(f'\nSource IP: {scorchutils.int_to_ip(source_ip)}')
+                    print(f'Destination IP: {scorchutils.int_to_ip(destination_ip)}')
+                    print(f'Timestamp: {scorchutils.timestamp_to_date(timestamp)}')
+                    print(f'Bytes Transferred: {bytes_transferred}')
 
             case 'exit':
                 exit(0)
