@@ -105,6 +105,9 @@ def vsftpAnalyze(file_path):
                     ip_list = ", ".join(ips)
                     print(f"User: {user} IP Addresses: {ip_list}")
 
+            case "clear":
+                scorchutils.cls()
+
             case 'exit':
                 exit(0)
 
