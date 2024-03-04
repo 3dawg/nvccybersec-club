@@ -16,7 +16,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Now we go ahead and handle the logic of what type of log we are dealing with, with a chill switch statement
-
     match (args.type):
 
         case 'VSFTP':
