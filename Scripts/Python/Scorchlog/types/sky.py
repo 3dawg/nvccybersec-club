@@ -64,17 +64,18 @@ def skyAnalyze(file_path):
             case 'viewlogs':
                 print("Parsing host information...")
                 time.sleep(3)
-                for _ in range(num_entries):
-                    source_ip = struct.unpack('>I', f.read(4))[0]
-                    destination_ip = struct.unpack('>I', f.read(4))[0]
-                    timestamp = struct.unpack('>I', f.read(4))[0]
-                    bytes_transferred = struct.unpack('>I', f.read(4))[0]
-                    
-                    # Print the log info 
-                    print(f'\nSource IP: {scorchutils.int_to_ip(source_ip)}')
-                    print(f'Destination IP: {scorchutils.int_to_ip(destination_ip)}')
-                    print(f'Timestamp: {scorchutils.timestamp_to_date(timestamp)}')
-                    print(f'Bytes Transferred: {bytes_transferred}')
+                with open(file_path, 'rb') as f:
+                    for _ in range(num_entries):
+                        source_ip = struct.unpack('>I', f.read(4))[0]
+                        destination_ip = struct.unpack('>I', f.read(4))[0]
+                        timestamp = struct.unpack('>I', f.read(4))[0]
+                        bytes_transferred = struct.unpack('>I', f.read(4))[0]
+                        
+                        # Print the log info 
+                        print(f'\nSource IP: {scorchutils.int_to_ip(source_ip)}')
+                        print(f'Destination IP: {scorchutils.int_to_ip(destination_ip)}')
+                        print(f'Timestamp: {scorchutils.timestamp_to_date(timestamp)}')
+                        print(f'Bytes Transferred: {bytes_transferred}')
 
             case 'exit':
                 exit(0)
