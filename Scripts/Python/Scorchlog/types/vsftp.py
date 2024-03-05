@@ -7,7 +7,7 @@ def options(header):
     for k, i in header.items():
         print(scorchutils.colors.fg.lightblue, k, scorchutils.colors.reset, i,)
 
-def vsftpAnalyze(file_path):
+def analyze(file_path):
     header = {
        #title, options
        "print      ":" Print the user database information",
@@ -25,6 +25,7 @@ def vsftpAnalyze(file_path):
     user_downloads, user_downloads_info, user_uploads, user_uploads_info, user_directories, user_ip_map = ({} for i in range(6))    
     username = None
     
+
     with open(file_path, 'r') as file:
 
         for line in file:

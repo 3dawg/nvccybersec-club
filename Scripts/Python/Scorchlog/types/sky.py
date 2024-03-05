@@ -9,7 +9,7 @@ def options(header):
     for k, i in header.items():
         print(scorchutils.colors.fg.lightblue, k, scorchutils.colors.reset, i,)
 
-def skyAnalyze(file_path):
+def analyze(file_path):
     header = {
          #title, options
         "magicbytes": "   Print the magic bytes of the file",
