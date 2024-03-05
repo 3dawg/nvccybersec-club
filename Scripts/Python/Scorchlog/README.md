@@ -5,6 +5,7 @@ A multi-filetype log analyis tool that automates the process of manually searchi
 Currently, support is offered for the following log types
 - .sky files
 - VSFTPD logs
+- SSHD logs 
 
 *Usage*
 ```
@@ -18,5 +19,5 @@ options:
                         Path to the file taken as a string
   -t TYPE, --type TYPE  Type of log to process, current supported choices are VSFTP, SKY
 
---------------written by chaossec--------------
+--------------written by chaossec and atsechan--------------
 ```
